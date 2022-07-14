@@ -3,6 +3,7 @@ import os
 import io
 import re
 import shutil
+import subprocess
 import sys
 import platform
 import tarfile
@@ -146,7 +147,7 @@ class InstallKtoolsMixin(object):
 
         system_os_flag = '--enable-osx ' if system_os == 'Darwin' else ''
 
-        exit_code = os.system(f'cd {build_dir} && ./autogen.sh && ./configure {system_os_flag} && make && make check')
+        exit_code = subprocess.run(f'bash -l ./autogen.sh && bash -l ./configure {system_os_flag} && make && make check', shell=True, cwd=build_dir).returncode
         if(exit_code != 0):
             print('Ktools build failed.\n')
             sys.exit(1)
@@ -162,7 +163,7 @@ class InstallKtoolsMixin(object):
 
             # if the file name is the same as the directory we have found a
             # component executable
-            if split[-1] == split[-2]:
+            if split[-1] == split[-2] or split[-1] == split[-2] + ".exe":
                 component_path = os.path.join(self.get_bin_dir(), split[-1])
                 shutil.copy(p, component_path)
                 yield component_path
