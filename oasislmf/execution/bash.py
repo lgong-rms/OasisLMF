@@ -270,7 +270,7 @@ def print_command(command_file, cmd):
     :param command_file: File to append command to.
     :param cmd: The command to append
     """
-    with io.open(command_file, "a", encoding='utf-8') as myfile:
+    with io.open(command_file, "a", encoding='utf-8', newline='\n') as myfile:
         myfile.writelines(cmd + "\n")
 
 
